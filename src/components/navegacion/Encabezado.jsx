@@ -66,13 +66,6 @@ const Encabezado = () => {
 
               <Nav.Link
                 className={mostrarMenu ? "texto-marca" : "text-white"}
-                onClick={() => manejarNavegacion("/catalogo")}
-              >
-                {mostrarMenu ? <i className="bi bi-box-seam"> </i> : null} Catálogo
-              </Nav.Link>
-
-              <Nav.Link
-                className={mostrarMenu ? "texto-marca" : "text-white"}
                 onClick={() => manejarNavegacion("/clientes")}
               >
                 {mostrarMenu ? <i className="bi bi-person-square"> </i> : null} Clientes
@@ -112,6 +105,14 @@ const Encabezado = () => {
               >
                 {mostrarMenu ? <i className="bi bi-door-open"> </i> : null} Login
               </Nav.Link>
+
+              <Nav.Link
+                className={mostrarMenu ? "texto-marca" : "text-white"}
+                onClick={() => manejarNavegacion("/catalogo")}
+              >
+                {mostrarMenu ? <i className="bi bi-box-seam"> </i> : null} Catálogo
+              </Nav.Link>
+              
             </Nav>
           </Offcanvas.Body>
         </Navbar.Offcanvas>

@@ -36,7 +36,7 @@ const Productos = () => {
             <Container className="mt-4">
                 <h4>Productos</h4>
                 <TablaProductos
-                    clientes={productos}
+                    productos={productos}
                     cargando={cargando}
                 />
             </Container>

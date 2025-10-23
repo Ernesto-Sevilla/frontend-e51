@@ -1,6 +1,6 @@
 import { Table, Spinner } from "react-bootstrap";
 
-const TablaCliente = ({ clientes, cargando }) => {
+const TablaCompras = ({ compras, cargando }) => {
 
   if (cargando) {
     return (
@@ -18,28 +18,28 @@ const TablaCliente = ({ clientes, cargando }) => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Nombre 1</th>
+            <th>Fecha de compra</th>
             <th>Nombre 2</th>
             <th>Apellido 1</th>
             <th>Apellido 2</th>
             <th>Celular</th>
-            <th>Dirección</th>
-            <th>Cedula</th>
+            <th>Cargo</th>
+            <th>Fecha de contratación</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {clientes.map((cliente) => {
+          {empleados.map((empleado) => {
             return (
-              <tr key={cliente.id_cliente}>
-                <td>{cliente.id_cliente}</td>
-                <td>{cliente.primer_nombre}</td>
-                <td>{cliente.segundo_nombre}</td>
-                <td>{cliente.primer_apellido}</td>
-                <td>{cliente.segundo_nombre}</td>
-                <td>{cliente.celular}</td>
-                <td>{cliente.direccion}</td>
-                <td>{cliente.cedula}</td>
+              <tr key={empleado.id_empleado}>
+                <td>{empleado.id_empleado}</td>
+                <td>{empleado.primer_nombre}</td>
+                <td>{empleado.segundo_nombre}</td>
+                <td>{empleado.primer_apellido}</td>
+                <td>{empleado.segundo_nombre}</td>
+                <td>{empleado.celular}</td>
+                <td>{empleado.cargo}</td>
+                <td>{empleado.fecha_contratacion}</td>
                 <td>Acción</td>
               </tr>
             );
@@ -50,4 +50,4 @@ const TablaCliente = ({ clientes, cargando }) => {
   );
 };
 
-export default TablaCliente;
+export default TablaCompras;
