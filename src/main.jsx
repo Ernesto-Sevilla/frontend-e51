@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+//Importa de forma global los componentes para montarlos directamente en la aplicacion.
 import "bootstrap/dist/css/bootstrap.min.css";
 import './index.css'
 import App from './App.jsx'
