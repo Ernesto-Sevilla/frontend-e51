@@ -84,7 +84,7 @@ const Categorias = () => {
           </Col>
         </Row>
 
-        {/* Componente TablaCategorias para mostrar las categorías filtradas */}
+        {/* Componente TablaCategorias para mostrar las categorías filtradas y el spinner para ser utilizados en la ppagina web */}
         <TablaCategorias
           categorias={categoriasFiltradas}
           cargando={cargando}
