@@ -1,5 +1,6 @@
 import { Modal, Form, Button } from "react-bootstrap";
 
+
 const ModalRegistroCategoria = ({
   mostrarModal,
   setMostrarModal,
@@ -8,7 +9,9 @@ const ModalRegistroCategoria = ({
   agregarCategoria,
 }) => {
   return (
-    <Modal show={mostrarModal} onHide={() => setMostrarModal(false)} centered>
+    <Modal 
+    backdrop="static"
+      show={mostrarModal} onHide={() => setMostrarModal(false)} centered>
       <Modal.Header closeButton>
         <Modal.Title>Agregar Nueva Categoría</Modal.Title>
       </Modal.Header>

@@ -19,6 +19,8 @@ const Categorias = () => {
   const [categoriasFiltradas, setCategoriasFiltradas] = useState([]);
   const [textoBusqueda, setTextoBusqueda] = useState("");
 
+  const [orden, setOrden] = useState({ campo: "id_categoria", direccion: "asc" });
+
   const [mostrarModal, setMostrarModal] = useState(false);
   const [nuevaCategoria, setNuevaCategoria] = useState({
     nombre_categoria: '',
@@ -26,31 +28,51 @@ const Categorias = () => {
   });
 
   const manejarCambioInput = (e) => {
-  const { name, value } = e.target;
-  setNuevaCategoria(prev => ({ ...prev, [name]: value }));
-};
+    const { name, value } = e.target;
+    setNuevaCategoria(prev => ({ ...prev, [name]: value }));
+  };
 
   const agregarCategoria = async () => {
-  if (!nuevaCategoria.nombre_categoria.trim()) return;
+    if (!nuevaCategoria.nombre_categoria.trim()) return;
 
-  try {
-    const respuesta = await fetch('http://localhost:3000/api/registrarcategoria', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(nuevaCategoria)
-    });
+    try {
+      const respuesta = await fetch('http://localhost:3000/api/registrarcategoria', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(nuevaCategoria)
+      });
 
-    if (!respuesta.ok) throw new Error('Error al guardar');
+      if (!respuesta.ok) throw new Error('Error al guardar');
 
-    // Limpiar y cerrar
-    setNuevaCategoria({ nombre_categoria: '', descripcion_categoria: '' });
-    setMostrarModal(false);
-    await obtenerCategorias(); // Refresca la lista
-  } catch (error) {
-    console.error("Error al agregar categoría:", error);
-    alert("No se pudo guardar la categoría. Revisa la consola.");
+      // Limpiar y cerrar
+      setNuevaCategoria({ nombre_categoria: '', descripcion_categoria: '' });
+      setMostrarModal(false);
+      await obtenerCategorias(); // Refresca la lista
+    } catch (error) {
+      console.error("Error al agregar categoría:", error);
+      alert("No se pudo guardar la categoría. Revisa la consola.");
+    }
+  };
+
+  const manejarOrden = (campo) => {
+    setOrden((prev) => ({
+      campo,
+      direccion:
+        prev.campo === campo && prev.direccion === "asc" ? "desc" : "asc",
+    }));
+  };
+
+  const categoriasOrdenadas = [...categorias].sort((a, b) => {
+  const valorA = a[orden.campo];
+  const valorB = b[orden.campo];
+
+  if (typeof valorA === "number" && typeof valorB === "number") {
+    return orden.direccion === "asc" ? valorA - valorB : valorB - valorA;
   }
-};
+
+  const comparacion = String(valorA).localeCompare(String(valorB));
+  return orden.direccion === "asc" ? comparacion : -comparacion;
+});
 
 
   // Función para obtener las categorías desde la API.
@@ -103,7 +125,7 @@ const Categorias = () => {
   // Renderizamos el componente. Es decir, lo que se verá en la pantalla.
   return (
     <>
-    {/* Contenedor principal con margen superior */}
+      {/* Contenedor principal con margen superior */}
       <Container className="mt-4">
         {/* Título de la página */}
         <h4>Categorias</h4>
@@ -117,17 +139,16 @@ const Categorias = () => {
               manejarCambioBusqueda={manejarCambioBusqueda}
             />
           </Col>
+          <Col className="text-end">
+            <Button
+              className="color-boton"
+              onClick={() => setMostrarModal(true)}
+            >
+              + Nueva Categoría
+            </Button>
+          </Col>
+
         </Row>
-
-        <Col className="text-end">
-          <Button
-            className="color-boton"
-            onClick={() => setMostrarModal(true)}
-          >
-            + Nueva Categoría
-          </Button>
-        </Col>
-
 
         {/* Componente TablaCategorias para mostrar las categorías filtradas y el spinner para ser utilizados en la ppagina web */}
         <TablaCategorias

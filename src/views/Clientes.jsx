@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import TablaClientes from "../components/clientes/TablaClientes.jsx";
 import CuadroBusquedas from "../components/busquedas/CuadroBusqueda.jsx";
+import ModalRegistroCliente from "../components/clientes/ModalRegistroCliente.jsx";
 
 const Clientes = () => {
 
@@ -11,6 +12,47 @@ const Clientes = () => {
   const [clientesFiltrados, setClientesFiltrados] = useState([]);
   const [textoBusqueda, setTextoBusqueda] = useState("");
 
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [nuevoCliente, setNuevoCliente] = useState({
+    primer_nombre: '',
+    segundo_nombre: '',
+    primer_apellido: '',
+    segundo_apellido: '',
+    celular: '',
+    direccion: '',
+    cedula: ''
+  });
+
+  const manejarCambioInput = (e) => {
+  const { name, value } = e.target;
+  setNuevoCliente(prev => ({ ...prev, [name]: value }));
+};
+
+  const agregarCliente = async () => {
+  if (!nuevoCliente.primer_nombre.trim()) return;
+
+  try {
+    const respuesta = await fetch('http://localhost:3000/api/registrarcliente', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(nuevoCliente)
+    });
+
+    if (!respuesta.ok) throw new Error('Error al guardar');
+
+    
+    // Limpiar y cerrar
+    setNuevoCliente({ primer_nombre: '', segundo_nombre: '',
+        primer_apellido: '', segundo_apellido: '',
+        celular: '', direccion: '', cedula: '' });
+    setMostrarModal(false);
+    await obtenerClientes(); // Refresca la lista
+  } catch (error) {
+    console.error("Error al agregar el cliente:", error);
+    alert("No se pudo guardar el cliente. Revisa la consola.");
+  }
+};
+
   const obtenerClientes = async () => {
     try {
       const respuesta = await fetch("http://localhost:3000/api/clientes");
@@ -19,7 +61,6 @@ const Clientes = () => {
       }
 
       const datos = await respuesta.json();
-
 
       setClientes(datos);
       setClientesFiltrados(datos);
@@ -62,11 +103,30 @@ const Clientes = () => {
               manejarCambioBusqueda={manejarCambioBusqueda}
             />
           </Col>
+
+          <Col className="text-end">
+          <Button
+            className="color-boton"
+            onClick={() => setMostrarModal(true)}
+          >
+            + Nuevo cliente
+          </Button>
+        </Col>
         </Row>
+
         <TablaClientes
           clientes={clientesFiltrados}
           cargando={cargando}
         />
+
+        <ModalRegistroCliente
+          mostrarModal={mostrarModal}
+          setMostrarModal={setMostrarModal}
+          nuevoCliente={nuevoCliente}
+          manejarCambioInput={manejarCambioInput}
+          agregarCliente={agregarCliente}
+        />
+
       </Container>
     </>
   );

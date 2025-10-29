@@ -1,8 +1,39 @@
+
+import React, { useState } from "react";
 // Imporaciones de la libreria de bootstrap que son tablas y estilos prehechas que se utilizan para agilizar el proceso.
 import { Table, Spinner } from "react-bootstrap";
 
-// Componente de tabla de categorias que recibe las categorias y el estado de carga como props.
-const TablaCategoria = ({ categorias = [], cargando = false }) => {
+import BotonOrden from "../ordenamiento/BotonOrden.jsx";
+
+import PropTypes from "prop-types";
+
+const TablaCategoria = ({ categorias , cargando }) => {
+
+  // Componente de tabla de categorias que recibe las categorias y el estado de carga como props.
+  const [orden, setOrden] = useState({ campo: "id_categoria", direccion: "asc" });
+
+
+
+  const manejarOrden = (campo) => {
+    setOrden((prev) => ({
+      campo,
+      direccion:
+        prev.campo === campo && prev.direccion === "asc" ? "desc" : "asc",
+    }));
+  };
+
+  const categoriasOrdenadas = [...categorias].sort((a, b) => {
+    const valorA = a[orden.campo];
+    const valorB = b[orden.campo];
+
+    if (typeof valorA === "number" && typeof valorB === "number") {
+      return orden.direccion === "asc" ? valorA - valorB : valorB - valorA;
+    }
+
+    const comparacion = String(valorA).localeCompare(String(valorB));
+    return orden.direccion === "asc" ? comparacion : -comparacion;
+  });
+
 
   // Si el estado de carga es verdadero muestra un spinner de carga. (No es necesario escribir === ya que el if por si solo actua si la condicion es verdadera).
   if (cargando) {
@@ -25,17 +56,29 @@ const TablaCategoria = ({ categorias = [], cargando = false }) => {
         <thead>
           <tr>
             {/* Definicion de las columnas de la tabla. */}
-            <th>ID</th>
-            <th>Nombre categoria</th>
-            <th>Descripcion Categoria</th>
+            <th>
+              <BotonOrden campo="id_categoria" orden={orden} manejarOrden={manejarOrden}>
+                ID
+              </BotonOrden>
+            </th>
+            <th>
+              <BotonOrden campo="nombre_categoria" orden={orden} manejarOrden={manejarOrden}>
+                Nombre Categoría
+              </BotonOrden>
+            </th>
+            <th>
+              <BotonOrden campo="descripcion_categoria" orden={orden} manejarOrden={manejarOrden}>
+                Descripción Categoría
+              </BotonOrden>
+            </th>
             <th>Acciones</th>
           </tr>
         </thead>
         {/* Cuerpo de la tabla */}
         <tbody>
           {/* Mapeo de las categorias para crear una fila por cada categoria. */}
-          {categorias.map((categoria) => {
-            {/* Retorna una fila por cada categoria con sus datos. */}
+          {categoriasOrdenadas.map((categoria) => {
+            {/* Retorna una fila por cada categoria con sus datos. */ }
             return (
               <tr key={categoria.id_categoria}>
                 <td>{categoria.id_categoria}</td>
@@ -49,6 +92,17 @@ const TablaCategoria = ({ categorias = [], cargando = false }) => {
       </Table>
     </>
   );
+};
+
+TablaCategoria.propTypes = {
+  categorias: PropTypes.arrayOf(
+    PropTypes.shape({
+      id_categoria: PropTypes.number.isRequired,
+      nombre_categoria: PropTypes.string.isRequired,
+      descripcion_categoria: PropTypes.string,
+    })
+  ).isRequired,
+  cargando: PropTypes.bool.isRequired,
 };
 
 // Exportacion del componente para ser utilizado en otros archivos. 
