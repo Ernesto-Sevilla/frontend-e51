@@ -19,8 +19,6 @@ const Categorias = () => {
   const [categoriasFiltradas, setCategoriasFiltradas] = useState([]);
   const [textoBusqueda, setTextoBusqueda] = useState("");
 
-  const [orden, setOrden] = useState({ campo: "id_categoria", direccion: "asc" });
-
   const [mostrarModal, setMostrarModal] = useState(false);
   const [nuevaCategoria, setNuevaCategoria] = useState({
     nombre_categoria: '',
@@ -53,26 +51,6 @@ const Categorias = () => {
       alert("No se pudo guardar la categoría. Revisa la consola.");
     }
   };
-
-  const manejarOrden = (campo) => {
-    setOrden((prev) => ({
-      campo,
-      direccion:
-        prev.campo === campo && prev.direccion === "asc" ? "desc" : "asc",
-    }));
-  };
-
-  const categoriasOrdenadas = [...categorias].sort((a, b) => {
-  const valorA = a[orden.campo];
-  const valorB = b[orden.campo];
-
-  if (typeof valorA === "number" && typeof valorB === "number") {
-    return orden.direccion === "asc" ? valorA - valorB : valorB - valorA;
-  }
-
-  const comparacion = String(valorA).localeCompare(String(valorB));
-  return orden.direccion === "asc" ? comparacion : -comparacion;
-});
 
 
   // Función para obtener las categorías desde la API.
@@ -147,7 +125,6 @@ const Categorias = () => {
               + Nueva Categoría
             </Button>
           </Col>
-
         </Row>
 
         {/* Componente TablaCategorias para mostrar las categorías filtradas y el spinner para ser utilizados en la ppagina web */}

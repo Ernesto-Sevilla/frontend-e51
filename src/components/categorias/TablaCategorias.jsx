@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 
 const TablaCategoria = ({ categorias , cargando }) => {
 
+// ----------------------------------------------------------------------------------------------
   // Componente de tabla de categorias que recibe las categorias y el estado de carga como props.
   const [orden, setOrden] = useState({ campo: "id_categoria", direccion: "asc" });
 
@@ -34,6 +35,7 @@ const TablaCategoria = ({ categorias , cargando }) => {
     return orden.direccion === "asc" ? comparacion : -comparacion;
   });
 
+// --------------------------------------------------------------------------------------------
 
   // Si el estado de carga es verdadero muestra un spinner de carga. (No es necesario escribir === ya que el if por si solo actua si la condicion es verdadera).
   if (cargando) {
