@@ -1,7 +1,8 @@
+import React from "react";
 const  Ventas = () => {
     return (
         <>
-        <h2>Página de Ventas</h2>
+            <h2>Página de Ventas</h2>
         </>
     );
 };

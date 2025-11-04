@@ -1,5 +1,9 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
+
+// IMportamos loscomponentes de MOdals
+import ModalEdicionCategoria from '../components/categorias/ModalEdicionCategoria';
+import ModalEliminacionCategoria from '../components/categorias/ModalEliminacionCategoria';
 import ModalRegistroCategoria from '../components/categorias/ModalRegistroCategoria.jsx';
 
 // Importamos el componente TablaCategorias para su funsionamiento.
@@ -24,6 +28,62 @@ const Categorias = () => {
     nombre_categoria: '',
     descripcion_categoria: ''
   });
+
+  // Variables de estadopara control de apretura y cierre de los modales de edicion y elimiacion.
+  const [mostrarModalEdicion, setMostrarModalEdicion] = useState(false);
+  const [mostrarModalEliminar, setMostrarModalEliminar] = useState(false);
+
+  const [categoriaEditada, setCategoriaEditada] = useState(null);
+  const [categoriaAEliminar, setCategoriaAEliminar] = useState(null);
+
+  // MEtodo de control de apertura del modal de edicion y realizar la actualizacion
+
+  const abrirModalEdicion = (categoria) => {
+    setCategoriaEditada({ ...categoria });
+    setMostrarModalEdicion(true);
+  };
+
+  const guardarEdicion = async () => {
+    if (!categoriaEditada.nombre_categoria.trim()) return;
+    try {
+      const respuesta = await fetch(`http://localhost:3000/api/actualizarcategoria/${categoriaEditada.id_categoria}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(categoriaEditada)
+      });
+      if (!respuesta.ok) throw new Error('Error al actualizar');
+      setMostrarModalEdicion(false);
+      await obtenerCategorias();
+    } catch (error) {
+      console.error("Error al editar categoría:", error);
+      alert("No se pudo actualizar la categoría.");
+    }
+  };
+
+  // ########################################################################
+
+  // Creación de metodo control de apertura del modal de eliminacion y confirmara la eliminacion 
+  const abrirModalEliminacion = (categoria) => {
+    setCategoriaAEliminar(categoria);
+    setMostrarModalEliminar(true);
+  };
+
+  const confirmarEliminacion = async () => {
+    try {
+      const respuesta = await fetch(`http://localhost:3000/api/eliminarcategoria/${categoriaAEliminar.id_categoria}`, {
+        method: 'DELETE',
+      });
+      if (!respuesta.ok) throw new Error('Error al eliminar');
+      setMostrarModalEliminar(false);
+      setCategoriaAEliminar(null);
+      await obtenerCategorias();
+    } catch (error) {
+      console.error("Error al eliminar categoría:", error);
+      alert("No se pudo eliminar la categoría.");
+    }
+  };
+
+
 
   const manejarCambioInput = (e) => {
     const { name, value } = e.target;
@@ -131,7 +191,10 @@ const Categorias = () => {
         <TablaCategorias
           categorias={categoriasFiltradas}
           cargando={cargando}
+          abrirModalEdicion={abrirModalEdicion}
+          abrirModalEliminacion={abrirModalEliminacion}
         />
+
 
         <ModalRegistroCategoria
           mostrarModal={mostrarModal}
@@ -139,6 +202,21 @@ const Categorias = () => {
           nuevaCategoria={nuevaCategoria}
           manejarCambioInput={manejarCambioInput}
           agregarCategoria={agregarCategoria}
+        />
+
+        <ModalEdicionCategoria
+          mostrar={mostrarModalEdicion}
+          setMostrar={setMostrarModalEdicion}
+          categoriaEditada={categoriaEditada}
+          setCategoriaEditada={setCategoriaEditada}
+          guardarEdicion={guardarEdicion}
+        />
+
+        <ModalEliminacionCategoria
+          mostrar={mostrarModalEliminar}
+          setMostrar={setMostrarModalEliminar}
+          categoria={categoriaAEliminar}
+          confirmarEliminacion={confirmarEliminacion}
         />
 
       </Container>

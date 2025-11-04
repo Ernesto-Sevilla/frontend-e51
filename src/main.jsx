@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 //Importa de forma global los componentes para montarlos directamente en la aplicacion.
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -10,4 +10,4 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
   </StrictMode>,
-)
+);

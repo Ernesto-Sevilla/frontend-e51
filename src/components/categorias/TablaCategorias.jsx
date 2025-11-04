@@ -1,15 +1,14 @@
 
 import React, { useState } from "react";
 // Imporaciones de la libreria de bootstrap que son tablas y estilos prehechas que se utilizan para agilizar el proceso.
-import { Table, Spinner } from "react-bootstrap";
-
+import { Table, Spinner, Button } from "react-bootstrap";
 import BotonOrden from "../ordenamiento/BotonOrden.jsx";
 
 import PropTypes from "prop-types";
 
-const TablaCategoria = ({ categorias , cargando }) => {
+const TablaCategoria = ({ categorias, cargando, abrirModalEdicion, abrirModalEliminacion }) => {
 
-// ----------------------------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------------------------
   // Componente de tabla de categorias que recibe las categorias y el estado de carga como props.
   const [orden, setOrden] = useState({ campo: "id_categoria", direccion: "asc" });
 
@@ -35,7 +34,7 @@ const TablaCategoria = ({ categorias , cargando }) => {
     return orden.direccion === "asc" ? comparacion : -comparacion;
   });
 
-// --------------------------------------------------------------------------------------------
+  // --------------------------------------------------------------------------------------------
 
   // Si el estado de carga es verdadero muestra un spinner de carga. (No es necesario escribir === ya que el if por si solo actua si la condicion es verdadera).
   if (cargando) {
@@ -73,7 +72,9 @@ const TablaCategoria = ({ categorias , cargando }) => {
                 Descripción Categoría
               </BotonOrden>
             </th>
-            <th>Acciones</th>
+            <th>
+              Acciones
+            </th>
           </tr>
         </thead>
         {/* Cuerpo de la tabla */}
@@ -86,7 +87,24 @@ const TablaCategoria = ({ categorias , cargando }) => {
                 <td>{categoria.id_categoria}</td>
                 <td>{categoria.nombre_categoria}</td>
                 <td>{categoria.descripcion_categoria}</td>
-                <td>Acción</td>
+                <td>
+                  <Button
+                    variant="outline-warning"
+                    size="sm"
+                    className="me-2"
+                    onClick={() => abrirModalEdicion(categoria)}
+                  >
+                    <i className="bi bi-pencil"></i>
+                  </Button>
+                  <Button
+                    variant="outline-danger"
+                    size="sm"
+                    onClick={() => abrirModalEliminacion(categoria)}
+                  >
+                    <i className="bi bi-trash"></i>
+                  </Button>
+                </td>
+
               </tr>
             );
           })}
