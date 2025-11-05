@@ -3,10 +3,19 @@ import React, { useState } from "react";
 // Imporaciones de la libreria de bootstrap que son tablas y estilos prehechas que se utilizan para agilizar el proceso.
 import { Table, Spinner, Button } from "react-bootstrap";
 import BotonOrden from "../ordenamiento/BotonOrden.jsx";
+import Paginacion from "../ordenamiento/Paginacion";
 
-import PropTypes from "prop-types";
 
-const TablaCategoria = ({ categorias, cargando, abrirModalEdicion, abrirModalEliminacion }) => {
+const TablaCategoria = ({ 
+  categorias, 
+  cargando, 
+  abrirModalEdicion, 
+  abrirModalEliminacion, 
+  totalElementos,
+  elementosPorPagina,
+  paginaActual,
+  establecerPaginaActual
+}) => {
 
   // ----------------------------------------------------------------------------------------------
   // Componente de tabla de categorias que recibe las categorias y el estado de carga como props.
@@ -110,19 +119,15 @@ const TablaCategoria = ({ categorias, cargando, abrirModalEdicion, abrirModalEli
           })}
         </tbody>
       </Table>
+
+      <Paginacion
+      elementosPorPagina={elementosPorPagina}
+      totalElementos={totalElementos}
+      paginaActual={paginaActual}
+      establecerPaginaActual={establecerPaginaActual}
+      />
     </>
   );
-};
-
-TablaCategoria.propTypes = {
-  categorias: PropTypes.arrayOf(
-    PropTypes.shape({
-      id_categoria: PropTypes.number.isRequired,
-      nombre_categoria: PropTypes.string.isRequired,
-      descripcion_categoria: PropTypes.string,
-    })
-  ).isRequired,
-  cargando: PropTypes.bool.isRequired,
 };
 
 // Exportacion del componente para ser utilizado en otros archivos. 

@@ -12,8 +12,13 @@ import TablaCategorias from "../components/categorias/TablaCategorias";
 // Importamos el componente CuadroBusquedas para su funcionamiento.
 import CuadroBusquedas from "../components/busquedas/CuadroBusqueda";
 
+import Paginacion from "../components/ordenamiento/Paginacion.jsx";
+
 // Declaramos el componente funcional Categorias.
 const Categorias = () => {
+
+  const [paginaActual, establecerPaginaActual] = useState(1);
+  const elementosPorPagina = 5; // Número de productos por página
 
   // Definimos los estados necesarios para el componente que extraerán y manejarán las categorías.
   const [categorias, setCategorias] = useState([]);
@@ -22,6 +27,13 @@ const Categorias = () => {
   // Estado para manejar las categorías filtradas y el texto de búsqueda.
   const [categoriasFiltradas, setCategoriasFiltradas] = useState([]);
   const [textoBusqueda, setTextoBusqueda] = useState("");
+
+    // Calcular productos paginados
+  const categoriasPaginadas = categoriasFiltradas.slice(
+    (paginaActual - 1) * elementosPorPagina,
+    paginaActual * elementosPorPagina
+  );
+
 
   const [mostrarModal, setMostrarModal] = useState(false);
   const [nuevaCategoria, setNuevaCategoria] = useState({
@@ -189,10 +201,14 @@ const Categorias = () => {
 
         {/* Componente TablaCategorias para mostrar las categorías filtradas y el spinner para ser utilizados en la ppagina web */}
         <TablaCategorias
-          categorias={categoriasFiltradas}
+          categorias={categoriasPaginadas}
           cargando={cargando}
           abrirModalEdicion={abrirModalEdicion}
           abrirModalEliminacion={abrirModalEliminacion}
+          totalElementos={categorias.length} // Total de categorias
+          elementosPorPagina={elementosPorPagina} // Elementos por página
+          paginaActual={paginaActual} // Página actual
+          establecerPaginaActual={establecerPaginaActual} // Método para cambiar página
         />
 
 
@@ -218,7 +234,6 @@ const Categorias = () => {
           categoria={categoriaAEliminar}
           confirmarEliminacion={confirmarEliminacion}
         />
-
       </Container>
     </>
   );
