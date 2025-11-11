@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 
 const TablaProductos = ({ productos, cargando }) => {
 
-// ----------------------------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------------------------
   // Componente de tabla de categorias que recibe las categorias y el estado de carga como props.
   const [orden, setOrden] = useState({ campo: "id_producto", direccion: "asc" });
 
@@ -33,7 +33,7 @@ const TablaProductos = ({ productos, cargando }) => {
     return orden.direccion === "asc" ? comparacion : -comparacion;
   });
 
-// --------------------------------------------------------------------------------------------
+  // --------------------------------------------------------------------------------------------
 
   if (cargando) {
     return (
@@ -76,6 +76,9 @@ const TablaProductos = ({ productos, cargando }) => {
               </BotonOrden>
             </th>
             <th>
+              Imagen
+            </th>
+            <th>
               Acciones
             </th>
           </tr>
@@ -89,6 +92,19 @@ const TablaProductos = ({ productos, cargando }) => {
                 <td>{producto.descripcion_producto}</td>
                 <td>{producto.precio_unitario}</td>
                 <td>{producto.stock}</td>
+                <td>
+                  {producto.imagen ? (
+                    <img
+                      src={`data:image/png;base64,${producto.imagen}`}
+                      alt={producto.nombre_producto}
+                      width={50}
+                      height={50}
+                      style={{ objectFit: "cover" }}
+                    />
+                  ) : (
+                    'Sin imagen'
+                  )}
+                </td>
                 <td>Acción</td>
               </tr>
             );
